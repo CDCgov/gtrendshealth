@@ -1,0 +1,274 @@
+#' Query the Google Trends for Health API
+#'
+#' @description For health research only, fetches a graph of search volumes
+#' per time within a set of restrictions. Each term will result in a timeline of
+#' search over time. Note the data is sampled and Google can't guarantee the
+#' accuracy of the numbers. This service is closed to a subset of Health
+#' researchers. The quota provision is individually maintained by the
+#' Trends team.
+#'
+#' @param terms Required. Search terms the user wishes to explore.
+#' Up to 30 queries can be sent. Term format can be either a query or entity
+#' (e.g. /m/0d2p9p) and can include ORs using '+' sign.
+#' Example: "/m/0d2p9p + /m/0nd4ffr + awesomeness" will return a combined
+#' timeline of the three terms (which obviously differs from "/m/0d2p9p,
+#' /m/0nd4ffr, awesomeness" that returns 3 different timelines.)
+#' @param resolution One of day, week, month, or year.
+#' Week is default for the API, but required here to protect the quotas.
+#' @param start A date object representing the start of the query period. The
+#' default for the API is 2004-01-01, but a value is required here.
+#' @param end A date object representing the start of the query period. The
+#' default for the API is today, but a value is required here.
+#' @param country,region,dma Only
+#' one field of GeoRestriction should be filled. Country format is ISO-3166-2
+#' (2-letters), e.g. US. Region format is ISO-3166-2 (4-letters), e.g. US-NY
+#' (see more examples here: en.wikipedia.org/wiki/ISO_3166-2:US). DMA is
+#' nielsen dma id, e.g. 501 (support.google.com/richmedia/answer/2745487).
+#' @param key The API key from your Google Developer project authorized for
+#' Google Trends for Health API use, as a character. Defaults to using the
+#' API key set up for this package, if any.
+#' A key can be acquired by requesting access at
+#' \url{https://support.google.com/trends/contact/trends_api} and following the
+#' setup instructions.
+#' @param wait Wait before submitting the query, to protect the API quotas.
+#' The Google Trends for Gealth API is limited to 2 queries per second.
+#' @importFrom utils URLencode
+#' @importFrom httr GET
+#' @importFrom httr content
+#' @importFrom jsonlite fromJSON
+#'
+#' @examples
+#'
+#' if(Sys.getenv("GOOGLE_TRENDS_FOR_HEALTH_API_KEY")==""){
+#'   # Set up your API if not installed
+#'   set_gt_api_key("<your-valid-api-key>")
+#' }
+#'
+#' # run this example if you have set up a valid API key
+#' tryCatch({
+#'   # Query the Google Trends for Health service
+#'   monthly_trends <- get_health_trends(
+#'     terms = "fever",
+#'     resolution = "month",
+#'     start = as.Date("2024-01-01"),
+#'     end = as.Date("2024-12-31"),
+#'     country = "US"
+#'   )
+#'
+#'   # set a date for each monthly observation
+#'   # using the 15th of each month for the day
+#'   monthly_trends$date <- as.Date(
+#'     strptime(
+#'       paste("15", monthly_trends$period),
+#'        format = "%d %b %Y"
+#'     )
+#'   )
+#'
+#'   print(monthly_trends)
+#'
+#'   # Query the Google Trends for Health service
+#'   daily_trends <- get_health_trends(
+#'     terms = "fever",
+#'     resolution = "day",
+#'     start = as.Date("2024-01-01"),
+#'     end = as.Date("2024-12-31"),
+#'     country = "US"
+#'   )
+#'
+#'   head(daily_trends)
+#'
+#'   # plot the time series
+#'   plot(
+#'     daily_trends$date, daily_trends$value, type = "l", col = "blue",
+#'     xlab = "Date",
+#'     ylab = "Value",
+#'     main = "Daily and Monthly Trends for Fever"
+#'   )
+#'   lines(monthly_trends$date, monthly_trends$value, col = "red", lwd = 2)
+#'   legend("topright", legend = c("Daily Trends", "Monthly Trends"),
+#'     col = c("blue", "red"), lty = 1, lwd = c(1, 2))
+#' }, error = function(e) cat("\nYou need to set up a valid API key")
+#' )
+#'
+#' @export
+
+get_health_trends <- function(
+    terms,
+    resolution,
+    start,
+    end,
+    country=NULL,
+    region=NULL,
+    dma=NULL,
+    key = get_gt_api_key(),
+    wait = TRUE
+){
+
+  # get Google Trends API documentation
+  trends <- httr::GET("https://trends.googleapis.com/$discovery/rest?version=v1beta") |>
+    httr::content(as = "text") |>
+    jsonlite::fromJSON()
+
+  # get Google Trends for Health specific documentation
+  health <- trends$methods$getTimelinesForHealth
+
+  # build base uri
+  uri <- paste0(trends$rootUrl, health$flatPath, "?key=", key)
+
+
+
+
+  # check conditions for the terms
+  if( ! inherits(terms, "character"))
+    stop("Terms should be characters.")
+  if( length(terms) < 1)
+    stop("You should provide at least one term.")
+  if( length(terms) > 30)
+    stop("You can provide at most 30 terms")
+
+  uri <- paste0(
+    uri,
+    "&",
+    paste(paste0("terms=", terms), collapse = "&")
+  )
+
+
+
+
+  # check conditions for timeline resolution
+  if( length(resolution) > 1){
+    warning(
+      "Provided ", length(resolution), " resolutions, only the first will ",
+      "be used (", resolution[1], ")."
+    )
+    resolution <- resolution[1]
+  }
+
+  if( ! resolution %in% health$parameters$timelineResolution$enum)
+    stop(
+      "Resolution must be one of: ",
+      paste(health$parameters$timelineResolution$enum, collapse = ", ")
+    )
+
+  uri <- paste0(uri, "&timelineResolution=", resolution[1])
+
+
+
+
+  # check conditions for start and end dates
+  if( ! inherits(start, c("Date", "POSIXct", "POSIXt")))
+    stop("Start must be a date object.")
+
+  if( ! inherits(end, c("Date", "POSIXct", "POSIXt")))
+    stop("End must be a date object.")
+
+  if( as.Date(start) >= as.Date(end))
+    stop("Start must be before end.")
+
+  if( as.Date(end) >= Sys.Date())
+    stop("End must be before today.")
+
+  uri <- paste0(
+    uri, "&",
+    "time.startDate=", as.Date(start), "&",
+    "time.endDate=", as.Date(end)
+  )
+
+
+
+  #Check that a single geoRestriction is chosen
+  geoParams <- sum(
+    !sapply(
+      list(
+        country,
+        region,
+        dma
+      ),
+      is.null
+    )
+  )
+
+  if (geoParams > 1) {
+    stop("Error: Only one geographic restriction can be chosen")
+  }
+
+  if ( ! is.null(country)) {
+    geo <- paste0("geoRestriction.country=", country)
+  } else if (!is.null(region)){
+    geo <- paste0("geoRestriction.region=", region)
+  } else if (!is.null(dma)){
+    geo <- paste0("geoRestriction.dma=", dma)
+  } else {
+    geo <- ""
+  }
+
+
+  #Add Geo filter to link
+  if ( ! is.null(geo)){
+    if( ! is.character(geo)){
+      stop("The geographic restriction must be in string format", call. = FALSE)
+    } else {
+        uri <- paste0(uri, "&", geo)
+    }
+  }
+
+
+  # ensure proper uri
+  uri <- utils::URLencode(uri)
+
+
+  # impose a wait as a rate limiting measure
+  if(wait) Sys.sleep(0.5)
+
+
+  # query the Google Trends for Health API
+  response <- httr::GET(uri)
+
+  # process the response
+  nested_data <- response |>
+    httr::content(as = "text") |>
+    jsonlite::fromJSON() |>
+    getElement("lines")
+
+
+  # get a simple dataset with one row per term-date
+  flattened_data <- cbind(
+    term = do.call(
+      rep,
+      list(nested_data$term, sapply(nested_data$points, nrow))
+    ),
+    do.call(rbind, nested_data$points)
+  )
+
+  # format the date as a date object
+  if( ! resolution %in% c("day", "week")){
+    flattened_data$period <- flattened_data$date
+    flattened_data$date <- NA_character_
+  } else {
+    flattened_data$period <- resolution
+  }
+  flattened_data$date <- strptime(
+    flattened_data$date,
+    format = "%b %d %Y"
+  ) |>
+    as.Date()
+
+
+  # add geo restriction
+  if(geo == ""){
+    flattened_data$geo <- "world"
+  } else {
+    flattened_data$geo <- sub(".+=", "", geo)
+  }
+
+
+  # save the query as an attribute
+  attr(flattened_data, "query") <- response$url
+
+
+  # add class tibble for convenience, in case user relies on the tidyverse
+  class(flattened_data) <- c("tbl_df", "tbl", class(flattened_data))
+
+
+  return(flattened_data)
+}
