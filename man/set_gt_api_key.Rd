@@ -36,7 +36,6 @@ original file for recovery purposes.
 }
 \examples{
 
-\donttest{
 set_gt_api_key("111111abc", install = TRUE, path = tempdir())
 # The first time, reload your environment so you can use the key without
 # restarting R.
@@ -58,5 +57,4 @@ Sys.getenv("GOOGLE_TRENDS_FOR_HEALTH_API_KEY")
 unlink(
 list.files(tempdir(), all.files = TRUE, full.names = TRUE, pattern = ".Renv")
 )
-}
 }

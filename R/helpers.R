@@ -25,7 +25,6 @@
 #'
 #' @examples
 #'
-#' \donttest{
 #' set_gt_api_key("111111abc", install = TRUE, path = tempdir())
 #' # The first time, reload your environment so you can use the key without
 #' # restarting R.
@@ -47,7 +46,6 @@
 #' unlink(
 #' list.files(tempdir(), all.files = TRUE, full.names = TRUE, pattern = ".Renv")
 #' )
-#' }
 #' @export
 
 set_gt_api_key <- function(
@@ -184,9 +182,10 @@ remove_gt_api_key <- function(
 
 #' @examples
 #'
-#' \dontrun{
-#' get_gt_api_key()
-#' }
+#' tryCatch(
+#'   get_gt_api_key(),
+#'   error = function(e) cat("You need to set up a valid key")
+#' )
 #'
 #' @export
 

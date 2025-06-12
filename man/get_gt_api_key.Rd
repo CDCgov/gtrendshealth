@@ -23,8 +23,9 @@ original file for recovery purposes.
 }
 \examples{
 
-\dontrun{
-get_gt_api_key()
-}
+tryCatch(
+  get_gt_api_key(),
+  error = function(e) cat("You need to set up a valid key")
+)
 
 }
