@@ -13,6 +13,10 @@ A key can be acquired by requesting access at
 \url{https://support.google.com/trends/contact/trends_api} and following the
 setup instructions.}
 }
+\value{
+Returns the API key that is set in the
+GOOGLE_TRENDS_FOR_HEALTH_API_KEY  environment variable.
+}
 \description{
 This function will read your GOOGLE TRENDS FOR HEALTH API key
 from the environment variables.

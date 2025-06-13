@@ -23,6 +23,11 @@
 #' CENSUS_API_KEY that you already have in your \code{.Renviron} file.
 #' @param path Path to install the API key into.
 #'
+#' @returns Returns the API key that was saved to the
+#' GOOGLE_TRENDS_FOR_HEALTH_API_KEY environment variable.
+#' If \code{install = TRUE}, it saves the API key in the specified .Renviron
+#' file.
+#'
 #' @examples
 #'
 #' set_gt_api_key("111111abc", install = TRUE, path = tempdir())
@@ -179,7 +184,9 @@ remove_gt_api_key <- function(
 #' \url{https://support.google.com/trends/contact/trends_api} and following the
 #' setup instructions.
 #'
-
+#' @returns Returns the API key that is set in the
+#' GOOGLE_TRENDS_FOR_HEALTH_API_KEY  environment variable.
+#'
 #' @examples
 #'
 #' tryCatch(

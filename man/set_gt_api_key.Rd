@@ -21,6 +21,12 @@ for use in future sessions. Defaults to FALSE.}
 
 \item{path}{Path to install the API key into.}
 }
+\value{
+Returns the API key that was saved to the
+GOOGLE_TRENDS_FOR_HEALTH_API_KEY environment variable.
+If \code{install = TRUE}, it saves the API key in the specified .Renviron
+file.
+}
 \description{
 This function will set your GOOGLE TRENDS FOR HEALTH API key
 as an environment variable.

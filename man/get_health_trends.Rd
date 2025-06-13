@@ -49,6 +49,12 @@ setup instructions.}
 \item{wait}{Wait before submitting the query, to protect the API quotas.
 The Google Trends for Gealth API is limited to 2 queries per second.}
 }
+\value{
+A data.frame with one row per term and period, with the probability
+of the term being included in a search, for the specified geographic
+restriction and dates range. The probabilities are provided by the API as
+values multiplied by 1e7.
+}
 \description{
 For health research only, fetches a graph of search volumes
 per time within a set of restrictions. Each term will result in a timeline of

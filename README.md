@@ -12,7 +12,7 @@ coverage](https://codecov.io/gh/CDCgov/gtrendshealth/graph/badge.svg)](https://a
 
 ## Overview
 
-This packages connects to the Google Trends for Health API to query
+This package connects to the Google Trends for Health API to query
 Google Trends for projects authorized to use the health research data.
 It fetches a graph of search volumes per time within a set of
 restrictions. Each term will result in a timeline of search over time.

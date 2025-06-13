@@ -12,7 +12,7 @@ Connects to the 'Google Trends for Health' API hosted at \url{https://trends.goo
 Useful links:
 \itemize{
   \item \url{https://github.com/CDCgov/gtrendshealth}
-  \item Report bugs at \url{https://github.com/CDCgov/gtrendshealth}
+  \item Report bugs at \url{https://github.com/CDCgov/gtrendshealth/issues}
 }
 
 }
