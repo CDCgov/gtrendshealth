@@ -5,3 +5,4 @@
 ^README-.*\.png$
 ^LICENSE\.md$
 ^DISCLAIMER\.md$
+^codecov\.yml$

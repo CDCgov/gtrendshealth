@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/CDCgov/gtrendshealth/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CDCgov/gtrendshealth/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/CDCgov/gtrendshealth/graph/badge.svg)](https://app.codecov.io/gh/CDCgov/gtrendshealth)
 <!-- badges: end -->
 
 ## Overview
@@ -66,13 +68,6 @@ monthly_trends$date <- as.Date(
 )
 
 head(monthly_trends)
-#>    term    value       date   period geo
-#> 1 fever 3797.059 2024-01-15 Jan 2024  US
-#> 2 fever 3830.103 2024-02-15 Feb 2024  US
-#> 3 fever 3431.843 2024-03-15 Mar 2024  US
-#> 4 fever 3528.705 2024-04-15 Apr 2024  US
-#> 5 fever 5839.022 2024-05-15 May 2024  US
-#> 6 fever 6661.509 2024-06-15 Jun 2024  US
 
 # Query the Google Trends for Health service
 daily_trends <- get_health_trends(
@@ -84,13 +79,6 @@ daily_trends <- get_health_trends(
 )
 
 head(daily_trends)
-#>    term    value       date period geo
-#> 1 fever 4182.703 2024-01-01    day  US
-#> 2 fever 4061.522 2024-01-02    day  US
-#> 3 fever 4479.389 2024-01-03    day  US
-#> 4 fever 4373.064 2024-01-04    day  US
-#> 5 fever 3848.758 2024-01-05    day  US
-#> 6 fever 3848.241 2024-01-06    day  US
 
 # plot the time series
 plot(
@@ -103,5 +91,3 @@ lines(monthly_trends$date, monthly_trends$value, col = "red", lwd = 2)
 legend("topleft", legend = c("Daily Trends", "Monthly Trends"),
        col = c("blue", "red"), lty = 1, lwd = c(1, 2))
 ```
-
-<img src="man/figures/README-example-1.png" alt="Time series of Google search volume for the term _fever_ in the US, with weekly and monthly resolution"  />

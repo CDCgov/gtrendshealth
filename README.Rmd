@@ -22,6 +22,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/CDCgov/gtrendshealth/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CDCgov/gtrendshealth/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/CDCgov/gtrendshealth/graph/badge.svg)](https://app.codecov.io/gh/CDCgov/gtrendshealth)
 <!-- badges: end -->
 
 
@@ -75,9 +76,8 @@ If you only want the key for the active session, use `install = FALSE`.
 
 
 
-```{r}
+```{r eval=is.character(tryCatch(gtrendshealth::get_gt_api_key(), error = function(e) FALSE)) && !file.exists("man/figures/README-example-1.png")}
 #| label: example
-#| eval: is.character(tryCatch(gtrendshealth::get_gt_api_key(), error = function(e) FALSE)) && !file.exists("man/figures/README-example-1.png")
 #| fig.alt: "Time series of Google search volume for the term _fever_ in the US,
 #|  with weekly and monthly resolution"
 library(package = "gtrendshealth")
