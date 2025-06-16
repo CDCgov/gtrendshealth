@@ -76,8 +76,9 @@ If you only want the key for the active session, use `install = FALSE`.
 
 
 
-```{r eval=is.character(tryCatch(gtrendshealth::get_gt_api_key(), error = function(e) FALSE)) && !file.exists("man/figures/README-example-1.png")}
+```{r}
 #| label: example
+#| cache: true
 #| fig.alt: "Time series of Google search volume for the term _fever_ in the US,
 #|  with weekly and monthly resolution"
 library(package = "gtrendshealth")

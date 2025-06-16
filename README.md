@@ -68,6 +68,13 @@ monthly_trends$date <- as.Date(
 )
 
 head(monthly_trends)
+#>    term    value       date   period geo
+#> 1 fever 3762.237 2024-01-15 Jan 2024  US
+#> 2 fever 3791.168 2024-02-15 Feb 2024  US
+#> 3 fever 3390.748 2024-03-15 Mar 2024  US
+#> 4 fever 3524.479 2024-04-15 Apr 2024  US
+#> 5 fever 5838.251 2024-05-15 May 2024  US
+#> 6 fever 6565.209 2024-06-15 Jun 2024  US
 
 # Query the Google Trends for Health service
 daily_trends <- get_health_trends(
@@ -79,6 +86,13 @@ daily_trends <- get_health_trends(
 )
 
 head(daily_trends)
+#>    term    value       date period geo
+#> 1 fever 4147.128 2024-01-01    day  US
+#> 2 fever 3970.826 2024-01-02    day  US
+#> 3 fever 4429.987 2024-01-03    day  US
+#> 4 fever 4468.318 2024-01-04    day  US
+#> 5 fever 3815.104 2024-01-05    day  US
+#> 6 fever 3837.251 2024-01-06    day  US
 
 # plot the time series
 plot(
@@ -91,3 +105,5 @@ lines(monthly_trends$date, monthly_trends$value, col = "red", lwd = 2)
 legend("topleft", legend = c("Daily Trends", "Monthly Trends"),
        col = c("blue", "red"), lty = 1, lwd = c(1, 2))
 ```
+
+<img src="man/figures/README-example-1.png" alt="Time series of Google search volume for the term _fever_ in the US, with weekly and monthly resolution"  />
