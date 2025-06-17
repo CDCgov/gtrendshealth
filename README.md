@@ -26,6 +26,20 @@ requesting access at
 <https://support.google.com/trends/contact/trends_api> and following the
 setup instructions.
 
+## Installation
+
+Install the package from CRAN using:
+
+``` r
+install.packages("gtrendshealth")
+```
+
+Install the development version from CDCgov GitHub using:
+
+``` r
+remotes::install_github("CDCgov/gtrendshealth")
+```
+
 ## Usage
 
 After receiving access to the Google Trends for Health API and setting
