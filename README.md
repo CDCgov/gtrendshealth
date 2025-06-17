@@ -83,12 +83,12 @@ monthly_trends$date <- as.Date(
 
 head(monthly_trends)
 #>    term    value       date   period geo
-#> 1 fever 3762.237 2024-01-15 Jan 2024  US
-#> 2 fever 3791.168 2024-02-15 Feb 2024  US
-#> 3 fever 3390.748 2024-03-15 Mar 2024  US
-#> 4 fever 3524.479 2024-04-15 Apr 2024  US
-#> 5 fever 5838.251 2024-05-15 May 2024  US
-#> 6 fever 6565.209 2024-06-15 Jun 2024  US
+#> 1 fever 3790.267 2024-01-15 Jan 2024  US
+#> 2 fever 3796.673 2024-02-15 Feb 2024  US
+#> 3 fever 3433.563 2024-03-15 Mar 2024  US
+#> 4 fever 3518.654 2024-04-15 Apr 2024  US
+#> 5 fever 5810.850 2024-05-15 May 2024  US
+#> 6 fever 6659.129 2024-06-15 Jun 2024  US
 
 # Query the Google Trends for Health service
 daily_trends <- get_health_trends(
@@ -101,19 +101,22 @@ daily_trends <- get_health_trends(
 
 head(daily_trends)
 #>    term    value       date period geo
-#> 1 fever 4147.128 2024-01-01    day  US
-#> 2 fever 3970.826 2024-01-02    day  US
-#> 3 fever 4429.987 2024-01-03    day  US
-#> 4 fever 4468.318 2024-01-04    day  US
-#> 5 fever 3815.104 2024-01-05    day  US
-#> 6 fever 3837.251 2024-01-06    day  US
+#> 1 fever 4161.743 2024-01-01    day  US
+#> 2 fever 4073.911 2024-01-02    day  US
+#> 3 fever 4609.581 2024-01-03    day  US
+#> 4 fever 4457.883 2024-01-04    day  US
+#> 5 fever 3811.465 2024-01-05    day  US
+#> 6 fever 3862.523 2024-01-06    day  US
 
 # plot the time series
 plot(
   daily_trends$date, daily_trends$value, type = "l", col = "blue",
   xlab = "Date",
-  ylab = "Value",
-  main = "Daily and Monthly Trends for Fever in the US, 2024"
+  ylab = "Probability (x10 M)",
+  main = paste(
+    "Daily and Monthly Trends in Interest",
+    "\nfor the term Fever in the US, 2024"
+  )
 )
 lines(monthly_trends$date, monthly_trends$value, col = "red", lwd = 2)
 legend("topleft", legend = c("Daily Trends", "Monthly Trends"),

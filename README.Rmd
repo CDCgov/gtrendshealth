@@ -136,8 +136,11 @@ head(daily_trends)
 plot(
   daily_trends$date, daily_trends$value, type = "l", col = "blue",
   xlab = "Date",
-  ylab = "Value",
-  main = "Daily and Monthly Trends for Fever in the US, 2024"
+  ylab = "Probability (x10 M)",
+  main = paste(
+    "Daily and Monthly Trends in Interest",
+    "\nfor the term Fever in the US, 2024"
+  )
 )
 lines(monthly_trends$date, monthly_trends$value, col = "red", lwd = 2)
 legend("topleft", legend = c("Daily Trends", "Monthly Trends"),
