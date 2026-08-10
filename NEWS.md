@@ -1,3 +1,8 @@
+# gtrendshealth 1.0.1
+
+Updating maintainer email.
+
+
 # gtrendshealth 1.0.0
 
 This version is considered feature complete, as it handles queries as documented

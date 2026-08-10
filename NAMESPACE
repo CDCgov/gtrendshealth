@@ -3,7 +3,9 @@
 export(get_gt_api_key)
 export(get_health_trends)
 export(set_gt_api_key)
-importFrom(httr,GET)
-importFrom(httr,content)
+importFrom(httr,
+  GET,
+  content
+)
 importFrom(jsonlite,fromJSON)
 importFrom(utils,URLencode)
